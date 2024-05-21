@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.zadanierekrutacyjne.domain.loginandregister.LoginAndRegisterFacade;
 
 @Configuration
@@ -22,6 +23,7 @@ import org.zadanierekrutacyjne.domain.loginandregister.LoginAndRegisterFacade;
 @AllArgsConstructor
 public class SecurityConfig {
     private final LoginAndRegisterFacade loginAndRegisterFacade;
+    private final JwtAuthTokenFilter jwtAuthTokenFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authentcationConfiguration) throws Exception {
@@ -47,6 +49,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
