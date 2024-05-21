@@ -13,6 +13,7 @@ import org.zadanierekrutacyjne.domain.loginandregister.dto.UserResponseDto;
 import org.zadanierekrutacyjne.infrastructure.loginandregister.controller.dto.RegisterRequestDto;
 import org.zadanierekrutacyjne.infrastructure.loginandregister.controller.dto.RegisterResponseDto;
 
+
 @RestController
 @Log
 @AllArgsConstructor
@@ -27,4 +28,6 @@ public class LoginAndRegisterRestController {
         final UserResponseDto userResponseDto = loginAndRegisterFacade.register(mapper.fromReqisterRequestDto(registerRequestDto));
         return ResponseEntity.ok(mapper.fromUserResponseDto(userResponseDto, "REGISTERED"));
     }
+
+
 }
