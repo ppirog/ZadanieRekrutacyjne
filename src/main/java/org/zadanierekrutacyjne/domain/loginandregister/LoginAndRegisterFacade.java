@@ -14,6 +14,7 @@ public class LoginAndRegisterFacade {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserUpdater userUpdater;
 
     public UserResponseDto register(UserRequestDto requestDto){
         final User user = userMapper.mapToUser(requestDto);
@@ -25,5 +26,9 @@ public class LoginAndRegisterFacade {
         final User user = userRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return userMapper.mapToUserResponseDto(user);
+    }
+
+    public UserResponseDto updateByLogin(String login,UserRequestDto requestDto){
+        return userUpdater.updateByLogin(login,requestDto);
     }
 }
