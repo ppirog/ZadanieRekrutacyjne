@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.login = ?1")
     Optional<User> findByLogin(String login);
 
@@ -15,5 +15,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Modifying
     @Query("update User u set u.login = ?1, u.password = ?2 where u.id = ?3")
-    int updateLoginAndPasswordById(String login, String password, Long id);
+    void updateLoginAndPasswordById(String login, String password, Long id);
 }
