@@ -15,7 +15,7 @@ public class DuplicateLoginExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public DuplicateKeyExceptionDto handleException(DataIntegrityViolationException exception) {
+    public DuplicateKeyExceptionDto handleException() {
         return DuplicateKeyExceptionDto.builder()
                 .message("Login already exists")
                 .build();
