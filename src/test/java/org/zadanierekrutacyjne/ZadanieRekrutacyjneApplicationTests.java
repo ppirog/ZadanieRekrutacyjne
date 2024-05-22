@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.zadanierekrutacyjne.domain.loginandregister.dto.UserResponseDto;
 import org.zadanierekrutacyjne.infrastructure.errorvalidation.ApiValidationErrorResponseDto;
 
 import java.util.List;
