@@ -2,5 +2,4 @@
 https://www.youtube.com/watch?v=SUUSqMasf-w
 
 # Tech stack:
-Java, Spring, Hibernate, Liquibase, Postgresql, JUnit, Testcontainers
-
+Java, Spring, JWT, Hibernate, Liquibase, Postgresql, JUnit, Testcontainers
