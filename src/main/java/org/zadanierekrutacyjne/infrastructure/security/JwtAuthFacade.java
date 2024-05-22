@@ -8,6 +8,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.zadanierekrutacyjne.infrastructure.security.dto.JwtResponseDto;
+import org.zadanierekrutacyjne.infrastructure.security.dto.TokenRequestDto;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -30,7 +32,6 @@ public class JwtAuthFacade {
         final User principal = (User) authenticate.getPrincipal();
         String token = createToken(principal);
         String login = principal.getUsername();
-
         return JwtResponseDto.builder()
                 .token(token)
                 .login(login)

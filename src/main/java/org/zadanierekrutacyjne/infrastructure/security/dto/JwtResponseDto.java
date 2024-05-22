@@ -1,4 +1,4 @@
-package org.zadanierekrutacyjne.infrastructure.security;
+package org.zadanierekrutacyjne.infrastructure.security.dto;
 
 import lombok.Builder;
 
