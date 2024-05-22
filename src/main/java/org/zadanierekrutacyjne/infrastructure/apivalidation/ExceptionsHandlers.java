@@ -18,6 +18,7 @@ public class ExceptionsHandlers {
     @ResponseStatus(HttpStatus.CONFLICT)
     public DuplicateKeyExceptionDto handleDataIntegrityViolationException() {
         final String loginAlreadyExists = "Login already exists";
+        log.info(loginAlreadyExists);
         return DuplicateKeyExceptionDto.builder()
                 .message(loginAlreadyExists)
                 .build();
@@ -28,6 +29,7 @@ public class ExceptionsHandlers {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public UsernameNotFoundExceptionDto handleUsernameNotFoundException() {
         final String loginNotFound = "Login not found";
+        log.info(loginNotFound);
         return UsernameNotFoundExceptionDto.builder()
                 .message(loginNotFound)
                 .build();
