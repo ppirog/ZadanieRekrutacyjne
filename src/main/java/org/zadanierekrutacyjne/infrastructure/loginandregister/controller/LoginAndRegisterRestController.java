@@ -30,7 +30,8 @@ public class LoginAndRegisterRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RegisterResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
         final UserResponseDto userResponseDto = loginAndRegisterFacade.register(mapper.fromReqisterRequestDto(registerRequestDto));
-        return ResponseEntity.ok(mapper.fromUserResponseDto(userResponseDto, "REGISTERED"));
+        final RegisterResponseDto registered = mapper.fromUserResponseDto(userResponseDto, "REGISTERED");
+        return ResponseEntity.status(HttpStatus.CREATED).body(registered);
     }
 
     @GetMapping("/find/{login}")
