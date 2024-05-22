@@ -64,18 +64,17 @@ class LoginAndRegisterFacadeTest {
 
     @ParameterizedTest(name = "Test {index} - login: {0}, password: {1}")
     @CsvSource({
-            "login1, password1",
-            "login2, password2",
-            "login3, password3"
+            "login1, newLogin1, password1",
+            "login2, newLogin2,  password2",
+            "login3, newLogin3, password3"
     })
-    void check_if_user_can_be_updated_by_login(String login, String password) {
-        final String newLogin = "newLogin" + login.substring(login.length() - 1);
-        UserRequestDto userRequestDto = new UserRequestDto(newLogin, "newPassword");
+    void check_if_user_can_be_updated_by_login(String login, String newLogin, String password) {
+        UserRequestDto userRequestDto = new UserRequestDto(newLogin, password);
         UserResponseDto userResponseDto = loginAndRegisterFacade.updateByLogin(login, userRequestDto);
 
         assertAll(
                 () -> Assertions.assertEquals(newLogin, userResponseDto.login()),
-                () -> Assertions.assertEquals("newPassword", userResponseDto.password())
+                () -> Assertions.assertEquals(password, userResponseDto.password())
         );
     }
 
