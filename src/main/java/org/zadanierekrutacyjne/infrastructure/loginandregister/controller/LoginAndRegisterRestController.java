@@ -1,7 +1,6 @@
 package org.zadanierekrutacyjne.infrastructure.loginandregister.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
