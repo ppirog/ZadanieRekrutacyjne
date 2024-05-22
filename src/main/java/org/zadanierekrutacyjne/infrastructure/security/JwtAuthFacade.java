@@ -3,6 +3,7 @@ package org.zadanierekrutacyjne.infrastructure.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,13 +18,14 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-
+@Log4j2
 @Component
 @AllArgsConstructor
 public class JwtAuthFacade {
 
     private final AuthenticationManager authenticatorManager;
     private final Clock clock;
+    private final JwtConfigProperties properties;
 
     public JwtResponseDto authenticateAndGenerateToken(TokenRequestDto tokenRequestDto){
         Authentication authenticate = authenticatorManager.authenticate(
@@ -39,11 +41,11 @@ public class JwtAuthFacade {
     }
 
     private String createToken(final User user) {
-        String secretKey = "secret";
+        String secretKey =  properties.secret();
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         Instant now = LocalDateTime.now(clock).toInstant(ZoneOffset.UTC);
-        Instant expireAt = now.plus(Duration.ofDays(1));
+        Instant expireAt = now.plus(Duration.ofHours(1));
         String issuer = "Zadanie Rekrutacyjne Service";
 
         return JWT.create()
