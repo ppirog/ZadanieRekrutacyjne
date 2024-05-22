@@ -42,7 +42,7 @@ public class ExceptionsHandlers {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiValidationErrorResponseDto handleException(MethodArgumentNotValidException exception) {
+    public ApiValidationErrorResponseDto handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         final List<String> errors = exception.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
         log.warn("Validation error{}", errors);
         return ApiValidationErrorResponseDto.builder()

@@ -71,7 +71,6 @@ class ZadanieRekrutacyjneApplicationTests {
 
         /* happy path
          * there is not any users in database
-         *
          * step 1 user made POST request to /register endpoint with not data and status is 400 with list of errors
          * step 2 user made POST request to /register endpoint with data someUser and somePassword and status is 201
          * step 3 user made POST request to /register endpoint with data someUser and somePassword and status is 409 with message "Login already exists"
