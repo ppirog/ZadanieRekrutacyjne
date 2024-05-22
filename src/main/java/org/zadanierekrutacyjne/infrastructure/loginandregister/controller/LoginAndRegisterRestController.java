@@ -1,5 +1,6 @@
 package org.zadanierekrutacyjne.infrastructure.loginandregister.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class LoginAndRegisterRestController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<RegisterResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<RegisterResponseDto> registerUser(@RequestBody @Valid RegisterRequestDto registerRequestDto) {
         final UserResponseDto userResponseDto = loginAndRegisterFacade.register(mapper.fromReqisterRequestDto(registerRequestDto));
         final RegisterResponseDto registered = mapper.fromUserResponseDto(userResponseDto, "REGISTERED");
         log.info("User registered: {}", registered);
@@ -43,7 +44,7 @@ public class LoginAndRegisterRestController {
     }
 
     @PutMapping("/update/{login}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable String login, @RequestBody RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable String login, @RequestBody @Valid RegisterRequestDto registerRequestDto) {
         final UserResponseDto body = loginAndRegisterFacade.updateByLogin(login, mapper.fromReqisterRequestDto(registerRequestDto));
         log.info("User updated: {}", body);
         return ResponseEntity.ok(body);
@@ -54,5 +55,4 @@ public class LoginAndRegisterRestController {
         log.info("Deleting user: {}", login);
         return ResponseEntity.ok(loginAndRegisterFacade.deleteUser(login));
     }
-
 }
