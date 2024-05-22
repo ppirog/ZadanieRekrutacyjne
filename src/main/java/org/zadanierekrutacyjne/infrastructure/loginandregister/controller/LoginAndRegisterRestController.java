@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,11 @@ public class LoginAndRegisterRestController {
     @PutMapping("/update/{login}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable String login, @RequestBody RegisterRequestDto registerRequestDto) {
         return ResponseEntity.ok(loginAndRegisterFacade.updateByLogin(login, mapper.fromReqisterRequestDto(registerRequestDto)));
+    }
+
+    @DeleteMapping("/delete/{login}")
+    public ResponseEntity<UserResponseDto> deleteUser(@PathVariable String login) {
+        return ResponseEntity.ok(loginAndRegisterFacade.deleteUser(login));
     }
 
 }

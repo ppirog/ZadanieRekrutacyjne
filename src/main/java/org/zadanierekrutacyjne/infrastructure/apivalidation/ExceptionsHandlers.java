@@ -15,7 +15,7 @@ public class ExceptionsHandlers {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public DuplicateKeyExceptionDto handleDataIntegrityViolationException() {
         final String loginAlreadyExists = "Login already exists";
         return DuplicateKeyExceptionDto.builder()
@@ -25,7 +25,7 @@ public class ExceptionsHandlers {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public UsernameNotFoundExceptionDto handleUsernameNotFoundException() {
         final String loginNotFound = "Login not found";
         return UsernameNotFoundExceptionDto.builder()
