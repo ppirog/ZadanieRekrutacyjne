@@ -16,19 +16,26 @@ public class LoginAndRegisterFacade {
     private final UserMapper userMapper;
     private final UserUpdater userUpdater;
 
-    public UserResponseDto register(UserRequestDto requestDto){
+    public UserResponseDto register(UserRequestDto requestDto) {
         final User user = userMapper.mapToUser(requestDto);
         final User saved = userRepository.save(user);
         return userMapper.mapToUserResponseDto(saved);
     }
 
-    public UserResponseDto findByUsername(String username){
+    public UserResponseDto findByUsername(String username) {
         final User user = userRepository.findByLogin(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User: " + username + " not found"));
         return userMapper.mapToUserResponseDto(user);
     }
 
-    public UserResponseDto updateByLogin(String login,UserRequestDto requestDto){
-        return userUpdater.updateByLogin(login,requestDto);
+    public UserResponseDto updateByLogin(String login, UserRequestDto requestDto) {
+        return userUpdater.updateByLogin(login, requestDto);
+    }
+
+    public UserResponseDto deleteUser(final String login) {
+        final User deleted = userRepository.findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("User: " + login + " not found"));
+        userRepository.deleteByLogin(deleted.getLogin());
+        return userMapper.mapToUserResponseDto(deleted);
     }
 }
