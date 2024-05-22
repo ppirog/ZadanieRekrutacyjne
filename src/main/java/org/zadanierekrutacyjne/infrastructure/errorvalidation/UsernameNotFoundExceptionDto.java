@@ -1,4 +1,4 @@
-package org.zadanierekrutacyjne.infrastructure.apivalidation;
+package org.zadanierekrutacyjne.infrastructure.errorvalidation;
 
 import lombok.Builder;
 

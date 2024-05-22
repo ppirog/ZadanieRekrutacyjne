@@ -1,5 +1,6 @@
 package org.zadanierekrutacyjne.infrastructure.security;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ class TokenRestControler {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<JwtResponseDto> fetchToken(@RequestBody TokenRequestDto dto) {
+    public ResponseEntity<JwtResponseDto> fetchToken(@RequestBody @Valid TokenRequestDto dto) {
         final JwtResponseDto body = jwtAuthFacade.authenticateAndGenerateToken(dto);
         log.info("Token generated: {}", body);
         return ResponseEntity.ok(body);

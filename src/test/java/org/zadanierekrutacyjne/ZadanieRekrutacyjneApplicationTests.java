@@ -18,12 +18,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.zadanierekrutacyjne.infrastructure.errorvalidation.ApiValidationErrorResponseDto;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,22 +70,45 @@ class ZadanieRekrutacyjneApplicationTests {
 
         /* happy path
          * there is not any users in database
-         *
-         * step 1 user made POST request to /register endpoint with data someUser and somePassword and status is 201
-         * step 2 user made POST request to /register endpoint with data someUser and somePassword and status is 409 with message "Login already exists"
-         * step 3 user made POST request to /login endpoint with data someUser2 and somePassword and status is 401
-         * step 4 user made POST request to /login endpoint with data someUser and somePassword and status is 200. response contains token
-         * step 5 user made GET request to /find/{login} without token endpoint with token and status is 401. response contains username
-         * step 6 user made GET request to /find/{login} with token endpoint with token and status is 200. response contains username
-         * step 7 user made PUT request to /update/{login} without token endpoint with token and status is 401.
-         * step 8 user made PUT request to /update/{login} with token endpoint with token with body someUser2 and status is 200. response contains someUser2
-         * step 9 user made DELETE request to /delete/{login} without token endpoint with token and status is 401
-         * step 10 user made DELETE request to /delete/{login} with token endpoint with token and status is 200. response contains deleted username
+         * step 1 user made POST request to /register endpoint with not data and status is 400 with list of errors
+         * step 2 user made POST request to /register endpoint with data someUser and somePassword and status is 201
+         * step 3 user made POST request to /register endpoint with data someUser and somePassword and status is 409 with message "Login already exists"
+         * step 4 user made POST request to /login endpoint with data someUser2 and somePassword and status is 401
+         * step 5 user made POST request to /login endpoint with data someUser and somePassword and status is 200. response contains token
+         * step 6 user made GET request to /find/{login} without token endpoint with token and status is 401. response contains username
+         * step 7 user made GET request to /find/{login} with token endpoint with token and status is 200. response contains username
+         * step 8 user made PUT request to /update/{login} without token endpoint with token and status is 401.
+         * step 9 user made PUT request to /update/{login} with token endpoint with token with body someUser2 and status is 200. response contains someUser2
+         * step 10 user made DELETE request to /delete/{login} without token endpoint with token and status is 401
+         * step 11 user made DELETE request to /delete/{login} with token endpoint with token and status is 200. response contains deleted username
          * */
 
 
 
-        //step 1 user made POST request to /register endpoint with data someUser and somePassword and status is 201
+        //step 1 user made POST request to /register endpoint with not data and status is 400 with list of errors
+        final MvcResult result5 = mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        final ApiValidationErrorResponseDto apiValidationErrorResponseDto = objectMapper.readValue(result5.getResponse().getContentAsString(), ApiValidationErrorResponseDto.class);
+        final List<String> errors = apiValidationErrorResponseDto.errors();
+
+        assertAll(
+                () -> assertTrue(errors.contains("login cannot be null")),
+                () -> assertTrue(errors.contains("login cannot be empty")),
+                () -> assertTrue(errors.contains("login cannot be blank")),
+                () -> assertTrue(errors.contains("password cannot be null")),
+                () -> assertTrue(errors.contains("password cannot be empty")),
+                () -> assertTrue(errors.contains("password cannot be blank"))
+        );
+
+
+
+        //step 2 user made POST request to /register endpoint with data someUser and somePassword and status is 201
         final MvcResult result = mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -101,7 +127,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 2 user made POST request to /register endpoint with data someUser and somePassword and status is 409 with message "Login already exists"
+        //step 3 user made POST request to /register endpoint with data someUser and somePassword and status is 409 with message "Login already exists"
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -114,7 +140,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 3 user made POST request to /login endpoint with data someUser2 and somePassword and status is 401
+        //step 4 user made POST request to /login endpoint with data someUser2 and somePassword and status is 401
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -127,7 +153,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 4 user made POST request to /login endpoint with data someUser and somePassword and status is 200. response contains token
+        //step 5 user made POST request to /login endpoint with data someUser and somePassword and status is 200. response contains token
         final MvcResult result1 = mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -146,14 +172,14 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 5 user made GET request to /find/{login} without token endpoint with token and status is 401. response contains username
+        //step 6 user made GET request to /find/{login} without token endpoint with token and status is 401. response contains username
         mockMvc.perform(MockMvcRequestBuilders.get("/find/someUser")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
 
 
 
-        //step 6 user made GET request to /find/{login} with token endpoint with token and status is 200. response contains username
+        //step 7 user made GET request to /find/{login} with token endpoint with token and status is 200. response contains username
         final MvcResult result2 = mockMvc.perform(get("/find/someUser")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -167,7 +193,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 7 user made PUT request to /update/{login} without token endpoint with token and status is 401.
+        //step 8 user made PUT request to /update/{login} without token endpoint with token and status is 401.
         mockMvc.perform(MockMvcRequestBuilders.get("/update/someUser")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -180,7 +206,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 8 user made PUT request to /update/{login} with token endpoint with token with body someUser2 and status is 200. response contains someUser2
+        //step 9 user made PUT request to /update/{login} with token endpoint with token with body someUser2 and status is 200. response contains someUser2
         final MvcResult result3 = mockMvc.perform(MockMvcRequestBuilders.put("/update/someUser")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -200,7 +226,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 9 user made DELETE request to /delete/{login} without token endpoint with token and status is 401
+        //step 10 user made DELETE request to /delete/{login} without token endpoint with token and status is 401
         mockMvc.perform(MockMvcRequestBuilders.delete("/delete/someUser2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
@@ -208,7 +234,7 @@ class ZadanieRekrutacyjneApplicationTests {
 
 
 
-        //step 10 user made DELETE request to /delete/{login} with token endpoint with token and status is 200. response contains deleted username
+        //step 11 user made DELETE request to /delete/{login} with token endpoint with token and status is 200. response contains deleted username
         final MvcResult result4 = mockMvc.perform(MockMvcRequestBuilders.delete("/delete/someUser2")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
