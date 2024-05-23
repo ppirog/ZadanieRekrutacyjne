@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,9 @@ import java.util.List;
 @Setter(AccessLevel.PACKAGE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor
-@Table(name = "app_user")
+@Table(name = "app_user" , indexes = {
+        @Index(name = "idx_login", columnList = "login")
+})
 class User implements UserDetails {
 
     @Id
