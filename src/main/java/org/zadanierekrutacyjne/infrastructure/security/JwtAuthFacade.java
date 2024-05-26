@@ -45,7 +45,7 @@ public class JwtAuthFacade {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         Instant now = LocalDateTime.now(clock).toInstant(ZoneOffset.UTC);
-        Instant expireAt = now.plus(Duration.ofHours(1));
+        Instant expireAt = now.plus(Duration.ofHours(properties.hours()));
         String issuer = "Zadanie Rekrutacyjne Service";
 
         return JWT.create()

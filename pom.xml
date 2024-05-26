@@ -19,6 +19,7 @@
         <spring-boot-starter-security.version>3.2.4</spring-boot-starter-security.version>
         <java-jwt.version>4.4.0</java-jwt.version>
         <spring-boot-starter-validation.version>3.2.1</spring-boot-starter-validation.version>
+
     </properties>
     <dependencies>
         <dependency>
